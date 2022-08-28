@@ -349,4 +349,40 @@ class User:
                     plt.show()
                     com = int(input("Please enter the currency number whose chart you want to display:(or 0 for exit)\n"))
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            elif command == 6:
+                os.system("clear")  # change to cls
+                day_data_1 = {0: ["Symbol", "Open", "Volume"]}
+                for ind, i in enumerate(self.date_index, start=1):
+                    t = self.data.iloc[i]
+                    day_data_1[ind] = [t["Symbol"], t["Open"], t["Volume"]]
+                print(f"Market state:                                         Date:{self.date[0]}")
+                print(pd.DataFrame(day_data_1), end="\n\n")
+                com = int(input("Please enter the currency number whose \n"
+                                "Linear regression chart you want to display:(or 0 for exit)\n"))
+                if com != 0:
+                    shape_data = {"Date": [], "Price": []}
+                    if self.date_index[0] <= 30:
+                        coun = self.date_index[0]-2
+                    else:
+                        coun = 30
+                    for i in range(coun, -1, -1):
+                        try:
+                            shape_data["Price"].append(self.data.iloc[self.date_index[com-1]-i]["Open"])
+                            shape_data["Date"].append(int(self.data.iloc[self.date_index[com-1]-i]["Date"][-2:]))
+                        except:
+                            pass
+                    x = np.array(shape_data["Date"]).reshape(-1, 1)
+                    y = np.array(shape_data["Price"])
+                    df = linear_model.LinearRegression()
+                    df.fit(x, y)
+                    y_p = df.predict(x)
+                    plt.scatter(x, y)
+                    plt.plot(x, y_p, color="red")
+                    plt.show()
 
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            else:
+                break
+
+
+# =================================================================
