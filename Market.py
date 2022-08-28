@@ -386,3 +386,9 @@ class User:
 
 
 # =================================================================
+if __name__ == "__main__":
+    day = input("please enter the date in form '20xx-xx-xx': (between 2010:01:11 and 2022:05:02) \n")
+    print("loading ...")
+    a = Market("stock_market_data", day)
+    os.system("clear")  # change it cls in windows
+    a.manager()
