@@ -284,3 +284,69 @@ class User:
                         print("Currency sold successfully.")
                         time.sleep(2)
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            elif command == 2:
+                os.system("clear")  # change to cls
+                dips = float(input("Deposit amount:    "))
+                while dips < 0:
+                    dips = float(input("Deposit wast successfully! please try again.\nDeposit amount:    "))
+                self.balance += dips
+                print("Deposit was successfully.")
+                time.sleep(1)
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            elif command == 3:
+                changes = {}
+                for i in self.date_index:
+                    changes[self.data.iloc[i]["Open"]] = [self.data.iloc[i-1]["Open"], i]
+                final = []
+                for ind, i in enumerate(changes):
+                    final.append((i*100/changes[i][0], changes[i][1], changes[i][0]))
+                final.sort(reverse=True)
+                final_data = {0: ["Symbol", "Today", "Yesterday", "Percentage of changes"]}  # (24 hours)
+                for ind, i in enumerate(final, start=1):
+                    t = self.data.iloc[i[1]]
+                    final_data[ind] = [t["Symbol"], t["Open"], i[2], "%" + "%3.3f" % (i[0]-100)]
+                os.system("clear")  # change to cls
+                print(f"Market state:                                         Date:{self.date[0]}")
+                print(pd.DataFrame(final_data), end="\n\n")
+                input("for continue press enter. ")
+
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            elif command == 4:
+                os.system("clear")  # change to cls
+                compony = ["AMZN", "FB", "TSLA", "GOOGL", "AAPL"]
+                dis_balance = {0: ["Symbol", "Amount", "Volume"]}
+                for ind, i in enumerate(self.currency_balance, start=1):
+                    dis_balance[ind] = [i, self.currency_balance[i], self.currency_balance[i] *
+                                        self.data.iloc[self.date_index[compony.index(i)]]["Open"]]
+                print(f"currency balance:                                  Date:{self.date[0]}")
+                print(pd.DataFrame(dis_balance), end="\n\n")
+                print(f"cash balance:                                      {self.balance}", end="\n\n")
+                input("for continue press enter.")
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            elif command == 5:
+                os.system("clear")  # change to cls
+                day_data_1 = {0: ["Symbol", "Open", "Volume"]}
+                for ind, i in enumerate(self.date_index, start=1):
+                    t = self.data.iloc[i]
+                    day_data_1[ind] = [t["Symbol"], t["Open"], t["Volume"]]
+                print(f"Market state:                                         Date:{self.date[0]}")
+                print(pd.DataFrame(day_data_1), end="\n\n")
+                com = int(input("Please enter the currency number whose chart you want to display:(or 0 for exit)\n"))
+                if com != 0:
+                    shape_data = {"Date": [], "Price": []}
+                    if self.date_index[0] <= 30:
+                        coun = self.date_index[0]-2
+                    else:
+                        coun = 30
+                    for i in range(coun, -1, -1):
+                        try:
+                            shape_data["Price"].append(self.data.iloc[self.date_index[com-1]-i]["Open"])
+                            shape_data["Date"].append(self.data.iloc[self.date_index[com-1]-i]["Date"][-5:])
+                        except:
+                            pass
+                    df = pd.DataFrame(shape_data)
+                    df.plot(x="Date", y="Price")
+                    plt.show()
+                    com = int(input("Please enter the currency number whose chart you want to display:(or 0 for exit)\n"))
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
