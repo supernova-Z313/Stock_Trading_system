@@ -1,3 +1,13 @@
+import pandas as pd
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+from sklearn import datasets, linear_model
+import time
+import os
+# =================================================================
+
+
 class Market:
     def __init__(self, data_file_name: str = "stock_market_data", start_day: str = "2010-01-11"):
         self._data = pd.read_csv(f"{data_file_name}.csv")
