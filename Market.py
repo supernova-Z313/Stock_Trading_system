@@ -43,3 +43,66 @@ class Market:
         time.sleep(2)
     # -------------------------------------------------------------------------
 
+    def manager(self):
+        while self._first_page_state != "3":
+            os.system("clear")  # change to cls
+            print("              HELLO !!\nWelcome to the stock financial market. \n\n"
+                  "what do you want to do: (1)sign up     (2)login\n           or           (3)next day    (4)exit")
+            self._first_page_state = int(input())
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            if self._first_page_state == 1:
+                os.system("clear")  # change to cls
+                name = input("Please enter your first and last name:\n")
+                national_code = int(input("Please enter your National Code:\n"))
+                birth_date = input("Please enter your date of birth as an example: (zzzz:xx:yy)\n")
+                first_balance = float(input("Please enter how much money you want to add to your account in first:\n"))
+                username = input("Please choose a Username: \n")
+                while username in self.__username_p:
+                    username = input("This Username was chosen by another user. Please choose another Username:\n")
+                while username == "0":
+                    username = input("This value cant be your Username please try again: \n")
+                pass_w = input("Please choose a Password: \n")
+                os.system("clear")  # change to cls
+                self.__username_p[username] = pass_w
+                self.__users[username] = User(name, national_code, birth_date, self, first_balance)
+                print("Account was successfully create. \nfor work with your account please login.")
+                time.sleep(1)  # change time
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            elif self._first_page_state == 2:
+                os.system("clear")  # change to cls
+                use = None
+                pass_c = None
+                while (use not in self.__username_p) or (use in self.__username_p and pass_c != self.__username_p[use]):
+                    use = input("Please enter your Username: (or for sign up enter 0)\n")
+                    if use == "0":
+                        break
+                    pass_c = input("Please enter your Password: \n")
+                if use != "0":
+                    self.__users[use].work_station()
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            elif self._first_page_state == 3:
+                for ind, i in enumerate(self._date_index):
+                    self._date_index[ind] = i + 1
+                self._date[0] = self._data.iloc[self._date_index[0]]["Date"]
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            else:
+                break
+    # -------------------------------------------------------------------------
+
+    @property
+    def date_index(self):
+        return self._date_index
+    # -------------------------------------------------------------------------
+
+    @property
+    def date(self):
+        return self._date
+    # -------------------------------------------------------------------------
+
+    @property
+    def data(self):
+        return self._data
+
+
+# =================================================================
+
